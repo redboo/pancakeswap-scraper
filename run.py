@@ -22,7 +22,7 @@ def run(log_level, interval=None):
         if interval:
             elapsed_time = time.monotonic() - start_time
             elapsed_time = elapsed_time if elapsed_time >= 0 else 0
-            if sleep_length := args.interval - elapsed_time > 0:
+            if (sleep_length := args.interval - elapsed_time) > 0:
                 time.sleep(sleep_length)
         else:
             break
