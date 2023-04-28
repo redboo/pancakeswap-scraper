@@ -5,7 +5,7 @@
 ## Установка
 
 1. Установите [Python 3](https://practicum.yandex.ru/blog/kak-ustanovit-python-na-kompyuter/), если он еще не установлен на вашем компьютере.
-2. Скачайте репозиторий с помощью команды `git clone https://github.com/redboo/ses_parser.git` или скачайте [zip-архив](https://github.com/redboo/pancakeswap-scraper/archive/refs/heads/main.zip) и распакуйте его.
+2. Скачайте репозиторий с помощью команды `git clone https://github.com/redboo/pancakeswap-scraper.git` или скачайте [zip-архив](https://github.com/redboo/pancakeswap-scraper/archive/refs/heads/main.zip) и распакуйте его.
 3. Установите зависимости, запустив команду `pip install -r requirements.txt`.
 
 ## Запуск скрипта
