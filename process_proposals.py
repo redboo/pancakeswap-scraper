@@ -1,5 +1,4 @@
 import csv
-import os
 
 from snapshot import get_core_proposals, get_proposal_current_result, get_proposals_by_status
 
@@ -17,12 +16,11 @@ def format_vote_results(current_results, choices):
     }
 
 
-def process_proposals(csv_file, path="downloads"):
-    os.makedirs(path, exist_ok=True)
-
+def process_proposals(csv_file, limit=None):
     headers = ["Категория", "Название", "Описание"]
     max_num_choices = 0
     core_proposals_dict = {}
+    proposal_count = 0
 
     for status, category in CATEGORIES.items():
         try:
@@ -38,7 +36,7 @@ def process_proposals(csv_file, path="downloads"):
         headers.append(f"Выбор {i+1}")
         headers.append(f"Сумма {i+1}")
 
-    with open(csv_file, "w", newline="", encoding="utf-8") as f:
+    with open(csv_file, "a", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(headers)
 
@@ -64,6 +62,9 @@ def process_proposals(csv_file, path="downloads"):
                 row.extend(["", ""] * (max_num_choices - len(votes)))
                 rows.append(row)
 
-            writer.writerows(rows)
+                proposal_count += 1
 
-    print(f"Данные сохранены в файле {csv_file}")
+                if limit is not None and proposal_count >= limit:
+                    break
+
+            writer.writerows(rows)
