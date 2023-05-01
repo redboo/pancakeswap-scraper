@@ -1,4 +1,5 @@
 import csv
+from datetime import datetime
 
 from snapshot import get_core_proposals, get_proposal_current_result, get_proposals_by_status
 
@@ -17,7 +18,7 @@ def format_vote_results(current_results, choices):
 
 
 def process_proposals(csv_file, limit=None):
-    headers = ["Категория", "Название", "Описание"]
+    headers = ["Категория", "Название", "Описание", "Дата старта", "Дата завершения"]
     max_num_choices = 0
     core_proposals_dict = {}
     proposal_count = 0
@@ -47,6 +48,8 @@ def process_proposals(csv_file, limit=None):
             for proposal in core_proposals:
                 title = proposal["title"].replace("\n", " ")
                 description = proposal["body"].replace("\n", " ")
+                date_start = datetime.fromtimestamp(proposal["start"]).strftime("%Y-%m-%d %H:%M:%S")
+                date_end = datetime.fromtimestamp(proposal["end"]).strftime("%Y-%m-%d %H:%M:%S")
                 try:
                     current_results = get_proposal_current_result(proposal["id"])
                     votes = format_vote_results(current_results, proposal["choices"])
@@ -55,7 +58,7 @@ def process_proposals(csv_file, limit=None):
                         f"Произошла ошибка при получении текущих результатов для пропозала {proposal['id']}: {e}"
                     )
 
-                row = [category, title, description]
+                row = [category, title, description, date_start, date_end]
                 for choice, vp_sum in votes.items():
                     row.extend([choice, vp_sum])
 
