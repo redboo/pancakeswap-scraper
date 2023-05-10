@@ -74,7 +74,7 @@ def run(log_level, interval=None, csv=False, excel=False, encoding="utf-8", limi
     while True:
         os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
-        csv_file = create_csv_file(filename_suffix="core_proposals", download_dir=DOWNLOAD_DIR)
+        csv_file = create_csv_file()
         start_time = time.monotonic()
         print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Парсинг запущен...")
 

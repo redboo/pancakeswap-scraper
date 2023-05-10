@@ -8,7 +8,7 @@ def create_csv_file(
     headers=None,
     delimiter=",",
     encoding="utf-8",
-    filename_suffix="data",
+    filename_suffix="pancakeswap",
     download_dir: str = "downloads",
 ):
     """
