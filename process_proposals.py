@@ -10,14 +10,11 @@ CATEGORIES = {
 }
 
 
-def format_vote_results(current_results, choices):
-    return {
-        choice: f"{sum(vote['vp'] for vote, c in zip(current_results, choices) if c == choice):,.2f}"
-        for choice in choices
-    }
+def format_vote_results(vote, choice) -> dict[str, float]:
+    return {k: round(sum(d["vp"] for d in vote if d["choice"] == i), 2) for i, k in enumerate(choice, start=1)}
 
 
-def process_proposals(csv_file, limit=None):
+def process_proposals(csv_file, limit=None) -> None:
     headers = ["Категория", "Название", "Описание", "Дата старта", "Дата завершения"]
     max_num_choices = 0
     core_proposals_dict = {}
