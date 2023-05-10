@@ -1,4 +1,5 @@
 import logging
+import os
 import time
 from datetime import datetime
 
@@ -6,6 +7,8 @@ import click
 
 from process_proposals import process_proposals
 from utils import convert_csv_to_excel, create_csv_file
+
+DOWNLOAD_DIR = "downloads"
 
 
 def setup_logging(level) -> None:
@@ -69,7 +72,9 @@ def run(log_level, interval=None, csv=False, excel=False, encoding="utf-8", limi
     setup_logging(log_level)
     excel_file = None
     while True:
-        csv_file = create_csv_file(filename_prefix="core_proposals")
+        os.makedirs(DOWNLOAD_DIR, exist_ok=True)
+
+        csv_file = create_csv_file(filename_suffix="core_proposals", download_dir=DOWNLOAD_DIR)
         start_time = time.monotonic()
         print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Парсинг запущен...")
 
