@@ -1,4 +1,5 @@
 import csv
+import logging
 from datetime import datetime
 
 from snapshot import get_core_proposals, get_proposal_current_result, get_proposals_by_status
@@ -51,9 +52,11 @@ def process_proposals(csv_file, limit=None) -> None:
                     current_results = get_proposal_current_result(proposal["id"])
                     votes = format_vote_results(current_results, proposal["choices"])
                 except Exception as e:
-                    raise Exception(
-                        f"Произошла ошибка при получении текущих результатов для пропозала {proposal['id']}: {e}"
+                    logging.error(
+                        f"Произошла ошибка при получении текущих результатов для пропозала {proposal['id']}: {e}",
+                        exc_info=True,
                     )
+                    continue
 
                 row = [category, title, description, date_start, date_end]
                 for choice, vp_sum in votes.items():
