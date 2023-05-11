@@ -17,7 +17,7 @@ def setup_logging(level) -> None:
     Args:
         level (str): Уровень логирования.
     """
-    logging.basicConfig(level=level, format="%(asctime)s %(levelname)s: %(message)s")
+    logging.basicConfig(level=level, format="%(asctime)s %(levelname)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 
 
 @click.command()
@@ -54,11 +54,13 @@ def setup_logging(level) -> None:
 )
 @click.option(
     "--limit",
-    default=None,
+    default=0,
     type=int,
     help="Укажите максимальное количество тем-топиков для парсинга (по умолчанию не ограничено)",
 )
-def run(log_level, interval=None, csv=False, excel=False, encoding="utf-8", limit=None):
+def run(
+    log_level: str, interval: int = 0, csv: bool = False, excel: bool = False, encoding: str = "utf-8", limit: int = 0
+) -> None:
     """Запускает скрипт для парсинга комментариев с сайта.
 
     Args:
@@ -89,8 +91,8 @@ def run(log_level, interval=None, csv=False, excel=False, encoding="utf-8", limi
                 f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Парсинг завершен. "
                 f"Данные cохранены в: {excel_file or csv_file}"
             )
-        except Exception as e:
-            logging.error(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Ошибка при парсинге. {e}", exc_info=True)
+        except Exception:
+            logging.error("Ошибка при парсинге.", exc_info=True)
 
         if interval:
             elapsed_time = time.monotonic() - start_time

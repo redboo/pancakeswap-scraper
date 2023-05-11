@@ -15,11 +15,9 @@ def format_vote_results(vote, choice) -> dict[str, float]:
     return {k: round(sum(d["vp"] for d in vote if d["choice"] == i), 2) for i, k in enumerate(choice, start=1)}
 
 
-def process_proposals(csv_file, limit=None) -> None:
+def process_proposals(csv_file, limit: int = 0) -> None:
     headers = ["Категория", "Название", "Описание", "Дата старта", "Дата завершения"]
-    max_num_choices = 0
-    core_proposals_dict = {}
-    proposal_count = 0
+    max_num_choices, proposal_count, core_proposals_dict = 0, 0, {}
 
     for status, category in CATEGORIES.items():
         try:
@@ -67,7 +65,7 @@ def process_proposals(csv_file, limit=None) -> None:
 
                 proposal_count += 1
 
-                if limit is not None and proposal_count >= limit:
+                if limit and limit <= proposal_count:
                     break
 
             writer.writerows(rows)
