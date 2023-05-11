@@ -90,7 +90,7 @@ def run(log_level, interval=None, csv=False, excel=False, encoding="utf-8", limi
                 f"Данные cохранены в: {excel_file or csv_file}"
             )
         except Exception as e:
-            print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Ошибка при парсинге. {e}")
+            logging.error(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Ошибка при парсинге. {e}", exc_info=True)
 
         if interval:
             elapsed_time = time.monotonic() - start_time
