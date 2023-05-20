@@ -27,7 +27,7 @@ def convert_csv_to_excel(
     excel_file_path = ""
     if output_excel:
         logging.info(f"Преобразуем файл '{csv_file_path}' в Excel-файл...")
-        excel_file_path = os.path.splitext(csv_file_path)[0] + ".xlsx"
+        excel_file_path = f"{os.path.splitext(csv_file_path)[0]}.xlsx"
         df.to_excel(excel_file_path, index=False)
 
         if not output_csv:
