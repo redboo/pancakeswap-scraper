@@ -94,13 +94,10 @@ def run(
         except Exception:
             logging.error("Ошибка при парсинге.", exc_info=True)
 
-        if interval:
-            elapsed_time = time.monotonic() - start_time
-            elapsed_time = elapsed_time if elapsed_time >= 0 else 0
-            if (sleep_length := interval - elapsed_time) > 0:
-                time.sleep(sleep_length)
-        else:
+        if not interval:
             break
+
+        time.sleep(max(interval - max(time.monotonic() - start_time, 0), 0))
 
 
 if __name__ == "__main__":
