@@ -30,9 +30,7 @@ def process_proposals(csv_file, limit: int = 0) -> None:
             max_num_choices = max(max_num_choices, max(len(proposal["choices"]) for proposal in core_proposals))
 
     for i in range(max_num_choices):
-        headers.append(f"Выбор {i+1}")
-        headers.append(f"Сумма {i+1}")
-
+        headers.extend((f"Выбор {i + 1}", f"Сумма {i + 1}"))
     with open(csv_file, "a", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(headers)
