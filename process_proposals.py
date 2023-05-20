@@ -27,7 +27,7 @@ def process_proposals(csv_file, limit: int = 0) -> None:
         core_proposals = get_core_proposals(proposals)
         core_proposals_dict[status] = core_proposals
         if core_proposals:
-            max_num_choices = max(max_num_choices, max([len(proposal["choices"]) for proposal in core_proposals]))
+            max_num_choices = max(max_num_choices, max(len(proposal["choices"]) for proposal in core_proposals))
 
     for i in range(max_num_choices):
         headers.append(f"Выбор {i+1}")
