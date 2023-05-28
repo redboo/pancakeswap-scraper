@@ -11,11 +11,11 @@ CATEGORIES = {
 }
 
 
-def format_vote_results(vote, choice) -> dict[str, float]:
+def format_vote_results(vote: list[dict], choice: list[str]) -> dict[str, float]:
     return {k: round(sum(d["vp"] for d in vote if d["choice"] == i), 2) for i, k in enumerate(choice, start=1)}
 
 
-def process_proposals(csv_file, limit: int = 0) -> None:
+def process_proposals(csv_file: str, limit: int = 0) -> None:
     headers = ["Категория", "Название", "Описание", "Дата старта", "Дата завершения"]
     max_num_choices, proposal_count, core_proposals_dict = 0, 0, {}
 
@@ -23,7 +23,7 @@ def process_proposals(csv_file, limit: int = 0) -> None:
         try:
             proposals = get_proposals_by_status(status)
         except Exception as e:
-            raise Exception(f"Произошла ошибка при получении предложений со статусом '{status}': {e}")
+            raise Exception(f"Произошла ошибка при получении предложений со статусом '{status}': {e}") from e
         core_proposals = get_core_proposals(proposals)
         core_proposals_dict[status] = core_proposals
         if core_proposals:
@@ -31,6 +31,7 @@ def process_proposals(csv_file, limit: int = 0) -> None:
 
     for i in range(max_num_choices):
         headers.extend((f"Выбор {i + 1}", f"Сумма {i + 1}"))
+
     with open(csv_file, "a", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(headers)
@@ -40,13 +41,8 @@ def process_proposals(csv_file, limit: int = 0) -> None:
 
             rows = []
             for proposal in core_proposals:
-                title = proposal["title"].replace("\n", " ")
-                description = proposal["body"].replace("\n", " ")
-                date_start = datetime.fromtimestamp(proposal["start"]).strftime("%Y-%m-%d %H:%M:%S")
-                date_end = datetime.fromtimestamp(proposal["end"]).strftime("%Y-%m-%d %H:%M:%S")
                 try:
-                    current_results = get_proposal_current_result(proposal["id"])
-                    votes = format_vote_results(current_results, proposal["choices"])
+                    votes = format_vote_results(get_proposal_current_result(proposal["id"]), proposal["choices"])
                 except Exception as e:
                     logging.error(
                         f"Произошла ошибка при получении текущих результатов для пропозала {proposal['id']}: {e}",
@@ -54,7 +50,13 @@ def process_proposals(csv_file, limit: int = 0) -> None:
                     )
                     continue
 
-                row = [category, title, description, date_start, date_end]
+                row = [
+                    category,
+                    proposal["title"].replace("\n", " "),
+                    proposal["body"].replace("\n", " "),
+                    datetime.fromtimestamp(proposal["start"]).strftime("%Y-%m-%d %H:%M:%S"),
+                    datetime.fromtimestamp(proposal["end"]).strftime("%Y-%m-%d %H:%M:%S"),
+                ]
                 for choice, vp_sum in votes.items():
                     row.extend([choice, vp_sum])
 

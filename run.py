@@ -11,7 +11,7 @@ from utils import convert_csv_to_excel, create_csv_file
 DOWNLOAD_DIR = "downloads"
 
 
-def setup_logging(level) -> None:
+def setup_logging(level: str) -> None:
     """Настройка логирования.
 
     Args:

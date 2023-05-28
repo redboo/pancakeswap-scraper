@@ -4,13 +4,13 @@ from datetime import datetime
 
 
 def create_csv_file(
-    filename=None,
-    headers=None,
-    delimiter=",",
-    encoding="utf-8",
-    filename_suffix="pancakeswap",
+    filename: str | None = None,
+    headers: list[str] | None = None,
+    delimiter: str = ",",
+    encoding: str = "utf-8",
+    filename_suffix: str = "pancakeswap",
     download_dir: str = "downloads",
-):
+) -> str:
     """
     Функция создает новый CSV-файл с заданными параметрами.
 
@@ -30,7 +30,7 @@ def create_csv_file(
         filename = f"{download_dir}/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}_{filename_suffix}.csv"
 
     with open(filename, "w", newline="", encoding=encoding) as file:
-        if headers:
+        if headers is not None:
             writer = csv.writer(file, delimiter=delimiter)
             writer.writerow(headers)
 
