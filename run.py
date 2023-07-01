@@ -11,7 +11,7 @@ from utils import convert_csv_to_excel, create_csv_file
 DOWNLOAD_DIR = "downloads"
 
 
-def setup_logging(level) -> None:
+def setup_logging(level: str) -> None:
     """Настройка логирования.
 
     Args:
@@ -59,7 +59,12 @@ def setup_logging(level) -> None:
     help="Укажите максимальное количество тем-топиков для парсинга (по умолчанию не ограничено)",
 )
 def run(
-    log_level: str, interval: int = 0, csv: bool = False, excel: bool = False, encoding: str = "utf-8", limit: int = 0
+    log_level: str = "WARNING",
+    interval: int = 0,
+    csv: bool = False,
+    excel: bool = False,
+    encoding: str = "utf-8",
+    limit: int = 0,
 ) -> None:
     """Запускает скрипт для парсинга комментариев с сайта.
 

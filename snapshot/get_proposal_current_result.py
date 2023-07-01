@@ -12,7 +12,7 @@ query getVotes($first: Int!, $skip: Int!, $where: VoteWhere) {
 HEADERS = {"Content-Type": "application/json"}
 
 
-def get_proposal_current_result(proposal_id):
+def get_proposal_current_result(proposal_id: int) -> list[dict]:
     variables = {"first": 1000, "skip": 0, "where": {"proposal": proposal_id}}
     with requests.Session() as session:
         response = session.post(URL, json={"query": QUERY, "variables": variables}, headers=HEADERS, timeout=10)

@@ -7,5 +7,5 @@ admins = [
 ]
 
 
-def get_core_proposals(data) -> list[dict]:
+def get_core_proposals(data: dict) -> list[dict]:
     return [proposal for proposal in data["data"]["proposals"] if proposal["author"].lower() in admins]

@@ -5,7 +5,10 @@ from .encode_csv import encode_csv
 
 
 def convert_csv_to_excel(
-    csv_file_path: str, encoding: str = "utf-8", output_csv: bool = False, output_excel: bool = True
+    csv_file_path: str,
+    encoding: str = "utf-8",
+    output_csv: bool = False,
+    output_excel: bool = True,
 ) -> tuple[str, str]:
     """
     Преобразует CSV-файл в Excel-файл, используя указанную кодировку.

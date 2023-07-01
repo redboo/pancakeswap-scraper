@@ -25,7 +25,7 @@ query getProposals($first: Int!, $skip: Int!, $state: String!, $orderDirection: 
 HEADERS = {"Content-Type": "application/json"}
 
 
-def get_proposals_by_status(status="active", order="asc"):
+def get_proposals_by_status(status: str = "active", order: str = "asc") -> dict:
     if status not in ["active", "pending", "closed"]:
         raise ValueError("Недопустимое значение статуса, допустимые значения: 'active', 'pending', 'closed'")
 
