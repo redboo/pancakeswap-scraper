@@ -59,7 +59,12 @@ def setup_logging(level: str) -> None:
     help="Укажите максимальное количество тем-топиков для парсинга (по умолчанию не ограничено)",
 )
 def run(
-    log_level: str, interval: int = 0, csv: bool = False, excel: bool = False, encoding: str = "utf-8", limit: int = 0
+    log_level: str = "WARNING",
+    interval: int = 0,
+    csv: bool = False,
+    excel: bool = False,
+    encoding: str = "utf-8",
+    limit: int = 0,
 ) -> None:
     """Запускает скрипт для парсинга комментариев с сайта.
 
