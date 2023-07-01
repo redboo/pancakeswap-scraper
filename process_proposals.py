@@ -4,11 +4,7 @@ from datetime import datetime
 
 from snapshot import get_core_proposals, get_proposal_current_result, get_proposals_by_status
 
-CATEGORIES = {
-    "active": "Голосование",
-    "pending": "Ожидает",
-    "closed": "Закрыто",
-}
+STATUS = ("active", "pending", "closed")
 
 
 def format_vote_results(vote: list[dict], choice: list[str]) -> dict[str, float]:
@@ -16,10 +12,10 @@ def format_vote_results(vote: list[dict], choice: list[str]) -> dict[str, float]
 
 
 def process_proposals(csv_file: str, limit: int = 0) -> None:
-    headers = ["Категория", "Название", "Описание", "Дата старта", "Дата завершения"]
+    headers = ["status", "title", "description", "start_date", "end_date"]
     max_num_choices, proposal_count, core_proposals_dict = 0, 0, {}
 
-    for status, category in CATEGORIES.items():
+    for status in STATUS:
         try:
             proposals = get_proposals_by_status(status)
         except Exception as e:
@@ -30,13 +26,13 @@ def process_proposals(csv_file: str, limit: int = 0) -> None:
             max_num_choices = max(max_num_choices, max(len(proposal["choices"]) for proposal in core_proposals))
 
     for i in range(max_num_choices):
-        headers.extend((f"Выбор {i + 1}", f"Сумма {i + 1}"))
+        headers.extend((f"choice_{i + 1}", f"amount_{i + 1}"))
 
     with open(csv_file, "a", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(headers)
 
-        for status, category in CATEGORIES.items():
+        for status in STATUS:
             core_proposals = core_proposals_dict[status]
 
             rows = []
@@ -51,14 +47,18 @@ def process_proposals(csv_file: str, limit: int = 0) -> None:
                     continue
 
                 row = [
-                    category,
+                    status,
                     proposal["title"].replace("\n", " "),
                     proposal["body"].replace("\n", " "),
                     datetime.fromtimestamp(proposal["start"]).strftime("%Y-%m-%d %H:%M:%S"),
                     datetime.fromtimestamp(proposal["end"]).strftime("%Y-%m-%d %H:%M:%S"),
                 ]
-                for choice, vp_sum in votes.items():
-                    row.extend([choice, vp_sum])
+                total_sum = sum(votes.values())
+                for choice, value in votes.items():
+                    try:
+                        row.extend([choice, f"{(value / total_sum) * 100:.2f}%"])
+                    except ZeroDivisionError:
+                        row.extend([choice, 0])
 
                 row.extend(["", ""] * (max_num_choices - len(votes)))
                 rows.append(row)
